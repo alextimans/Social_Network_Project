@@ -3,7 +3,8 @@
 
 The progress board can be accessed [here](https://github.com/SamuelsGitHub/Social_Network_Project/projects/1). The ToDo's have been inspired by the `To Do` section in `analysis_paper.md`.
 
-## Detailed analysis of paper (taken from `analysis_paper.md`)
+## Detailed analysis of paper
+(taken from `analysis_paper.md`)
 
 ### 1. Dataset
 
