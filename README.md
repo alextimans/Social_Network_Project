@@ -2,7 +2,7 @@ This repository contains our analysis of the paper "Negativity Spreads More than
 
 **Read `DOCUMENTATION.pdf` for more information.**
 
-# Repository Description
+# Repository Structure
 
 The repository has the following structure
 
