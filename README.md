@@ -43,21 +43,19 @@ Contains cited papers used in our work and in the paper from Schöne et al.
 ```
 our_work/
 ├── analysis_paper.md
-├── notebooks/
-│   ├── data_analysis.ipynb
-│   └── original_data -> ../../paper_material/data/
 ├── presentation/
 │   └── Social_Networks_Presentation.pdf
-└── r_scripts/
+└── scripts/
     ├── Social_Networks_Analysis1.R
+    ├── Social_Networks_Analysis2.ipynb
     └── original_data -> ../../paper_material/data/
 ```
 
 Contains our work:
 - `analysis_paper.md`: analysis of the paper from Schöne et al.
-- `notebooks/data_analysis.ipynb`: Jupyter Notebook for exploratory data analysis written by Samuel Anzalone, see `DOCUMENTATION.pdf` for more information
 - `presentation/Social_Networks_Presentation.pdf`: our final presentation
-- `r_scripts/Social_Networks_Analysis1.R`: R Script for statistical analysis written by Alex Timans, see `DOCUMENTATION.pdf` for more information
+- `scripts/Social_Networks_Analysis1.R`: R Script for statistical analysis written by Alex Timans, see `DOCUMENTATION.pdf` for more information
+- `scripts/data_analysis.ipynb`: Jupyter Notebook for exploratory data analysis written by Samuel Anzalone, see `DOCUMENTATION.pdf` for more information
 
 ## `paper_material` directory
 
