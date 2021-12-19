@@ -1,0 +1,314 @@
+---
+title: "Analysis_Manuscript"
+author: "Jonas Paul Schoene"
+date: "12/29/2020"
+output: html_document
+---
+
+### Library/GGplot default settings/Clean Env
+
+```{r}
+library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(psych)
+library(car)
+library(Rmisc)
+library(lubridate)
+library(gridExtra)
+library(effects)
+library(MuMIn)
+library(ggpubr)
+options(scipen = 999)
+
+theme_set(theme_bw())
+
+rm(list = ls()) #Cleaning the R Environment, since the datasets are pretty big and can slow down the PC 
+```
+
+### Reading in the csv files 
+```{r}
+#Trump
+df_t <-read.csv("data_annoymised/trump_anonymise_cleaned.csv") # this comes from runnig scriptes subfolder and is only first half
+
+#Hillary Dataset
+df_h <- read.csv("data_annoymised/hillary_anonymise_cleaned.csv")
+
+#same-sex Marriage Dataset
+
+df_g <- read.csv("data_annoymised/same_sex_anonymise_cleaned.csv")
+
+#Fergusoen Dataset
+df_f <- read.csv("data_annoymised/ferguson_anonymise_cleaned.csv")
+
+# Creating Longformats for Valence of Situation Analysis
+
+df_t_long <- df_t %>% 
+  gather(valence, intensity, sen_pos, sen_neg)
+
+df_t_long$intensity <- abs(df_t_long$intensity)
+
+df_h_long <- df_h %>% 
+  gather(valence, intensity, sen_pos, sen_neg)
+
+df_h_long$intensity <- abs(df_h_long$intensity)
+
+df_g_long <- df_g %>% 
+  gather(valence, intensity, sen_pos, sen_neg)
+
+df_g_long$intensity <- abs(df_g_long$intensity)
+
+df_f_long <- df_f %>% 
+  gather(valence, intensity, sen_pos, sen_neg)
+
+df_f_long$intensity <- abs(df_f_long$intensity)
+```
+
+## Study 1
+
+### Valence of the Situation. 
+
+```{r}
+### Trump = Positive
+
+model1 = lmer(intensity ~ valence + (1|user_id), df_t_long); summary(model1)
+
+confint.merMod(model1,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+
+r.squaredGLMM(model1)
+
+### Hill = Negative
+
+model2 = lmer(intensity ~ valence + (1|user_id), df_h_long); summary(model2)
+
+confint.merMod(model2,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+
+r.squaredGLMM(model2)
+
+```
+### Predicting emotional language spread.
+
+```{r}
+# Trump
+model3 = lmer(retweets_reciprocal ~  sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_t); summary(model3)
+
+r.squaredGLMM(model3)
+
+confint.merMod(model3,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+
+# Hill
+model4 = lmer(retweets_reciprocal ~ sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_h); summary(model4)
+
+r.squaredGLMM(model4)
+
+confint.merMod(model4,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+```
+
+### Political affiliation analysis of users producing negative tweets.
+
+```{r}
+political_overview <- df_t %>% 
+  dplyr::group_by(binary_affiliation) %>% 
+  dplyr::summarise(n = n())
+```
+### Analysis of content of negative tweets. 
+
+Due to data privacy we cannot include the content of the tweets which have been used for the topic analysis. Code for the topic modelling is in a seperate file.
+
+
+## Study 2
+
+### Valence of the Situation. 
+
+```{r}
+### Same-Sex = Positive
+
+model5 = lmer(intensity ~ valence + (1|user_id), df_g_long); summary(model5)
+
+confint.merMod(model5,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+
+r.squaredGLMM(model5)
+
+### Ferguson = Negative
+
+model6 = lmer(intensity ~ valence + (1|user_id), df_f_long); summary(model6)
+
+confint.merMod(model6,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+
+r.squaredGLMM(model6)
+
+```
+
+### Predicting emotional language spread.
+
+```{r}
+# Same-Sex
+model7 = lmer(retweets_reciprocal ~  sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_g); summary(model7)
+
+r.squaredGLMM(model7)
+
+confint.merMod(model7,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+
+# Ferguson 
+model8 = lmer(retweets_reciprocal ~  sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_f); summary(model8)
+
+r.squaredGLMM(model8)
+
+confint.merMod(model8,level = 0.95, method = "boot", boot.type = "perc", nsim = 100, oldNames = F)
+```
+
+### Political affiliation analysis of users producing negative tweets.
+
+```{r}
+political_overview <- df_g %>% 
+  dplyr::group_by(binary_affiliation) %>% 
+  dplyr::summarise(n = n())
+```
+### Analysis of content of negative tweets. 
+
+Due to data privacy we cannot include the content of the tweets which have been used for the topic analysis. Code for the topic modelling is in a seperate file.
+
+### Creating New MLM graphs
+
+```{r}
+# Trump
+model3 = lmer(retweets_reciprocal ~  sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_t); summary(model3)
+
+ee <- as.data.frame(Effect(c("sen_pos","sen_neg"),model3))
+ee <- ee %>% 
+  filter(sen_pos == 0 | sen_neg == 0)
+
+ee$intensity <- ee$sen_pos+ee$sen_neg
+first_row <- ee[1,]
+ee <- rbind(ee,first_row)
+ee$valence <- "sen_pos"
+ee$valence[6:10] <- "sen_neg"
+
+
+mlm_plot3 <- ggplot(ee, aes(x = intensity, y = fit, colour = valence))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_line(size = 1)+
+  labs(x = "Emotional Intensity", y = "Number of Retweets 1-(reciprocal+1)", colour = "                ")+
+  scale_color_manual(labels = c("Negative Language", "Positive Language"), values = c("red", "green3"))+
+  ggtitle("Election win")+
+  geom_ribbon(alpha=0.1, aes(ymin=lower,ymax=upper,colour = valence), linetype = 0,)+
+  ylim(0.12, 0.20)
+
+mlm_plot3
+
+png("graphs/trump.png", width = 500, height = 300)
+print(mlm_plot3)
+dev.off()
+
+# Hillary
+
+model4 = lmer(retweets_reciprocal ~ sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_h); summary(model4)
+
+ee <- as.data.frame(Effect(c("sen_pos","sen_neg"),model4))
+ee <- ee %>% 
+  filter(sen_pos == 0 | sen_neg == 0)
+
+ee$intensity <- ee$sen_pos+ee$sen_neg
+first_row <- ee[1,]
+ee <- rbind(ee,first_row)
+ee$valence <- "sen_pos"
+ee$valence[6:10] <- "sen_neg"
+
+
+mlm_plot4 <- ggplot(ee, aes(x = intensity, y = fit, colour = valence))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_line(size = 1)+
+  labs(x = "Emotional Intensity", y = "Number of Retweets 1-(reciprocal+1)", colour = "                ")+
+  scale_color_manual(labels = c("Negative Language", "Positive Language"), values = c("red", "green3"))+
+  ggtitle("Election loss")+
+  geom_ribbon(alpha=0.1, aes(ymin=lower,ymax=upper,colour = valence), linetype = 0,)+
+  ylim(0.12, 0.20)
+
+mlm_plot4
+
+png("graphs/hill.png", width = 500, height = 300)
+print(mlm_plot4)
+dev.off()
+
+figure <- ggarrange(mlm_plot4, mlm_plot3,
+                    labels = c("A", "B"),
+                    ncol = 2, nrow = 1,
+                    common.legend = TRUE)
+figure
+
+png("graphs/study2.png", width = 800, height = 400, res=100)
+print(figure)
+dev.off()
+
+
+### same-sex
+model7 = lmer(retweets_reciprocal ~  sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_g); summary(model7)
+
+ee <- as.data.frame(Effect(c("sen_pos","sen_neg"),model7))
+ee <- ee %>% 
+  filter(sen_pos == 0 | sen_neg == 0)
+
+ee$intensity <- ee$sen_pos+ee$sen_neg
+first_row <- ee[1,]
+ee <- rbind(ee,first_row)
+ee$valence <- "sen_pos"
+ee$valence[6:10] <- "sen_neg"
+
+
+mlm_plot1 <- ggplot(ee, aes(x = intensity, y = fit, colour = valence))+
+  geom_line(size = 1)+
+  labs(x = "Emotional Intensity", y = "Number of Retweets 1-(reciprocal+1)", colour = "                 ")+
+  scale_color_manual(labels = c("Negative Language", "Positive Language"), values = c("red", "green3"))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  ggtitle("Same-sex marriage")+
+  geom_ribbon(alpha=0.1, aes(ymin=lower,ymax=upper,colour = valence), linetype = 0,)+
+  ylim(0.10, 0.225)
+
+mlm_plot1
+
+png("graphs/same-sex.png", width = 500, height = 300)
+print(mlm_plot1)
+dev.off()
+
+# Ferguson
+model8 = lmer(retweets_reciprocal ~  sen_pos + sen_neg + sen_pos:sen_neg + scale(followers_log) + (1|user_id), df_f); summary(model8)
+
+ee <- as.data.frame(Effect(c("sen_pos","sen_neg"),model8))
+ee <- ee %>% 
+  filter(sen_pos == 0 | sen_neg == 0)
+
+ee$intensity <- ee$sen_pos+ee$sen_neg
+first_row <- ee[1,]
+ee <- rbind(ee,first_row)
+ee$valence <- "sen_pos"
+ee$valence[6:10] <- "sen_neg"
+
+
+mlm_plot2 <- ggplot(ee, aes(x = intensity, y = fit, colour = valence))+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_line(size = 1)+
+  labs(x = "Emotional Intensity", y = "Number of Retweets 1-(reciprocal+1)", colour = "                ")+
+  scale_color_manual(labels = c("Negative Language", "Positive Language"), values = c("red", "green3"))+
+  ggtitle("Ferguson unrest")+
+  geom_ribbon(alpha=0.1, aes(ymin=lower,ymax=upper,colour = valence), linetype = 0,)+
+  ylim(0.10, 0.225)
+
+mlm_plot2 
+
+png("graphs/ferg.png", width = 500, height = 300)
+print(mlm_plot2)
+dev.off()
+
+figure <- ggarrange(mlm_plot2, mlm_plot1,
+                    labels = c("A", "B"),
+                    ncol = 2, nrow = 1,
+                    common.legend = TRUE)
+figure
+
+png("graphs/study1.png", width = 800, height = 400, res=100)
+print(figure)
+dev.off()
+
+
+
+```
