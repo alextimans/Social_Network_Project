@@ -42,7 +42,6 @@ Contains cited papers used in our work and in the paper from Schöne et al.
 
 ```
 our_work/
-├── analysis_paper.md
 ├── presentation/
 │   └── Social_Networks_Presentation.pdf
 └── scripts/
@@ -52,7 +51,6 @@ our_work/
 ```
 
 Contains our work:
-- `analysis_paper.md`: analysis of the paper from Schöne et al.
 - `presentation/Social_Networks_Presentation.pdf`: our final presentation
 - `scripts/Social_Networks_Analysis1.R`: R Script for statistical analysis written by Alex Timans, see `DOCUMENTATION.pdf` for more information
 - `scripts/data_analysis.ipynb`: Jupyter Notebook for exploratory data analysis written by Samuel Anzalone, see `DOCUMENTATION.pdf` for more information
