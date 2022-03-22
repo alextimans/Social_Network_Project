@@ -1,6 +1,8 @@
 ## Social Network Project
 
-This repository contains our analysis of the paper "Negativity Spreads More than Positivity on Twitter after both Positive and Negative Political Situations" by Schöne et al. (2021) in the context of the lecture "Applied Network Science: Social Media Networks" at ETH Zurich, winter semester 2021.
+This repository contains our critical review and in-depth analysis of the paper  
+*Negativity Spreads More than Positivity on Twitter after both Positive and Negative Political Situations* by Schöne et al. (2021)  
+in the context of the lecture *Applied Network Science: Social Media Networks* at ETH Zurich, winter semester 2021.
 
 ─> Read `DOCUMENTATION.pdf` for more information.
 
