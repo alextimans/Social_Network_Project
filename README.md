@@ -1,13 +1,12 @@
-This repository contains our analysis of the paper "Negativity Spreads More than Positivity on Twitter after both Positive and Negative Political Situations" by Schöne et al. (2021) done in the context of the lecture "Applied Network Science: Social Media Networks".
+## Social Network Project
 
-**Read `DOCUMENTATION.pdf` for more information.**
+This repository contains our analysis of the paper "Negativity Spreads More than Positivity on Twitter after both Positive and Negative Political Situations" by Schöne et al. (2021) in the context of the lecture "Applied Network Science: Social Media Networks" at ETH Zurich, winter semester 2021.
 
-# Repository Structure
+─> Read `DOCUMENTATION.pdf` for more information.
 
-The repository has the following structure
-
+### Repository structure
+This repository has the following structure:
 ```
-.
 ├── README.md
 ├── DOCUMENTATION.pdf
 ├── cited_papers/
@@ -15,18 +14,14 @@ The repository has the following structure
 └── paper_material/
 ```
 
-List of files on the top level directory:
-- `README.md`: this text file
-- `DOCUMENTATION.pdf`: documentation of our work
-
-## `cited_papers` directory
-
+### Cited papers
+Includes the main paper we reviewed by Schöne et al. (2021).
 ```
 cited_papers/
 ├── Bail et al., 2018.pdf
 ├── Hutto et al., 2014.pdf
 ├── Ribeiro et al., 2016.pdf
-├── Schoöne et al. 2021 supp.pdf
+├── Schöne et al. 2021 supp.pdf
 ├── Schöne et al., 2021.pdf
 ├── Sentiment Analysis ML.pdf
 ├── Sentiment Analysis RF.pdf
@@ -35,11 +30,7 @@ cited_papers/
 └── Zimbra et al., 2016.pd
 ```
 
-Contains cited papers used in our work and in the paper from Schöne et al.
-
-
-## `our_work` directory
-
+### Contributions
 ```
 our_work/
 ├── presentation/
@@ -49,14 +40,12 @@ our_work/
     ├── Social_Networks_Analysis2.ipynb
     └── original_data -> ../../paper_material/data/
 ```
-
 Contains our work:
-- `presentation/Social_Networks_Presentation.pdf`: our final presentation
-- `scripts/Social_Networks_Analysis1.R`: R Script for statistical analysis written by Alex Timans, see `DOCUMENTATION.pdf` for more information
-- `scripts/data_analysis.ipynb`: Jupyter Notebook for exploratory data analysis written by Samuel Anzalone, see `DOCUMENTATION.pdf` for more information
+- `Social_Networks_Presentation.pdf`: our final presentation
+- `Social_Networks_Analysis1.R`: R Script for statistical analysis written by Alexander Timans
+- `Social_Networks_Analysis2.ipynb`: Jupyter Notebook for exploratory data analysis written by Samuel Anzalone
 
-## `paper_material` directory
-
+### Additional directory
 ```
 paper_material/
 ├── data/
@@ -66,7 +55,6 @@ paper_material/
     ├── analysis_manuscript.Rmd
     └── ...
 ```
-
-Contains the supplementary material the paper from Schöne et al.:
+Contains the supplementary material from the paper of Schöne et al. (2021):
 - `data/`: contains the tweet datasets
-- `r_scripts/`: contains the R Scripts used
+- `r_scripts/`: contains R Scripts
